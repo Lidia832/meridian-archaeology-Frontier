@@ -1,0 +1,24 @@
+MERIDIAN.OUT  -  cropmod output
+R. Halvorsen, 1994.
+
+LINE 1   banner
+  MERIDIAN CROPMOD <version>  STN=<id>  YEAR=<yyyy>  NDAYS=<n>
+
+LINE 2   column header, fixed text
+
+LINES 3..N+2   daily records (FORMAT I4,1X,F7.2,1X,F7.3,1X,F7.3,1X,F7.1,1X,F7.3)
+  cols  1- 4   day of year
+  cols  6-12   soil water, mm
+  cols 14-20   actual evapotranspiration, mm
+  cols 22-28   drainage, mm
+  cols 30-36   above ground biomass, g m-2
+  cols 38-44   leaf area index
+
+LAST LINE
+  YIELD <F10.3>   grain yield, t ha-1
+
+Fortran writes a field of asterisks when a value will not fit its
+width.  Consumers must handle that.  A field that overflows can also
+run into its neighbour with no separating space, which is why the
+daily records must be read by column and not by splitting on
+whitespace.  See MRD-143.

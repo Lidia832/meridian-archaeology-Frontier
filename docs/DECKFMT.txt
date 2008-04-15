@@ -1,0 +1,32 @@
+MERIDIAN.DAT  -  cropmod input deck
+R. Halvorsen, 1994.  Amended 1996-05 (units note).
+
+Column-exact.  Fields are read with the FORMAT statements in
+cropmod.f; there is no tolerance for shifted columns.
+
+RECORD 1  (FORMAT A8, I4, F8.3)
+  cols  1- 8   station identifier, left justified, blank padded
+  cols  9-12   calendar year
+  cols 13-20   latitude, decimal degrees north
+
+RECORD 2  (FORMAT F8.2, F8.2)
+  cols  1- 8   available water capacity, mm water per mm soil
+  cols  9-16   rooting depth, MILLIMETRES
+
+  NOTE: record 2 field 1 is a dimensionless fraction and field 2 is in
+  mm.  Their product is the profile capacity in mm.  Some of the older
+  station files carry rooting depth in centimetres.  Those files are
+  wrong and produce a profile ten times too small.
+
+DAILY RECORDS  (FORMAT I3, F6.1, F6.1, F6.1, F6.2)
+  cols  1- 3   day of year
+  cols  4- 9   maximum air temperature, degC
+  cols 10-15   minimum air temperature, degC
+  cols 16-21   precipitation, mm
+  cols 22-27   incoming shortwave radiation, MJ m-2 d-1
+
+TERMINATOR
+  A record with a negative value in cols 1-3.  Conventionally " -1".
+
+Records must be in ascending day-of-year order.  This is not checked
+by the model.  See MRD-118.
