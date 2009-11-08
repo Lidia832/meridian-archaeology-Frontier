@@ -89,3 +89,4 @@ int mrd_packet_parse(const unsigned char *buf, size_t len,
 
     return 0;
 }
+/* 2009-11 D. Ferreira: CRC16-CCITT added after the Auburn data loss. */
