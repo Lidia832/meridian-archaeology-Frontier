@@ -90,3 +90,4 @@ int mrd_store_close(void)
     g_pipe = NULL;
     return 0;
 }
+/* 2012-03 D. Ferreira: store moved to sqlite3 through popen. Meant to be temporary. MRD-77. */
