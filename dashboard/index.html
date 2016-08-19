@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge"><!-- field laptops still on IE, R.P. 2018 -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian Operator Console</title>
+<link rel="stylesheet" href="css/meridian.css">
+<!--
+  Meridian console. No build step (MRD-181): plain <script> tags, vendored
+  jQuery 1.11.3 + hand-written ES5. Load order matters and is by hand:
+    vendor -> util -> charts -> views -> app.
+  The tabbed app (app.js) is the default. Append ?legacy=1 for the original
+  2016 single-page layout driven by dashboard.js (still shipped).
+-->
+</head>
+<body>
+<div id="header">
+  <h1>Meridian</h1>
+  <span class="sub">Provincial Agri-Environmental Monitoring &amp; Yield Forecasting</span>
+  <span id="apiver" class="ver"></span>
+</div>
+
+<div id="app">
+  <nav id="tabs" class="tabbar"><!-- built by app.js --></nav>
+  <div id="content" class="content"><!-- active view mounts here --></div>
+</div>
+
+<div id="footer">
+  Meridian console build 2016.4.2 &middot; patches through 2023 &middot;
+  partial 2023 rewrite in ui-next/ (3 of 11 screens) &middot;
+  <a href="?legacy=1">legacy layout</a>
+</div>
+
+<script>
+/* Tiny pre-boot shim (inline on purpose - no build step). Decides whether
+ * to run the tabbed app or drop into the legacy single-page shell that
+ * dashboard.js drives. Kept inline so it runs before app.js/dashboard.js.
+ * L. Nakamura's original body markup lives in the template below. */
+(function () {
+  window.MERIDIAN_LEGACY = /[?&]legacy=1/.test(window.location.search);
+  if (window.MERIDIAN_LEGACY) {
+    var app = document.getElementById('app');
+    if (app) { app.parentNode.removeChild(app); }
+    var shell = document.createElement('div');
+    shell.id = 'legacy';
+    shell.className = 'legacy-shell';
+    shell.innerHTML =
+      '<div id="main">' +
+      '  <div id="left">' +
+      '    <h2>Stations</h2>' +
+      '    <table id="stations" class="grid">' +
+      '      <thead><tr><th>Station</th><th>Days</th><th>Years</th></tr></thead>' +
+      '      <tbody></tbody></table>' +
+      '  </div>' +
+      '  <div id="right">' +
+      '    <h2>Forecast <span id="sel"></span></h2>' +
+      '    <table id="forecast" class="grid">' +
+      '      <thead><tr><th>Year</th><th>Yield (t/ha)</th><th>Days</th><th>Model</th><th>Run</th></tr></thead>' +
+      '      <tbody></tbody></table>' +
+      '    <h2>Daily series</h2>' +
+      '    <div id="chart"></div>' +
+      '    <table id="series" class="grid small">' +
+      '      <thead><tr><th>DOY</th><th>SW</th><th>ET</th><th>Drain</th><th>Biomass</th><th>LAI</th></tr></thead>' +
+      '      <tbody></tbody></table>' +
+      '  </div>' +
+      '</div>';
+    var footer = document.getElementById('footer');
+    document.body.insertBefore(shell, footer);
+  }
+})();
+</script>
+
+<!-- vendor -->
+<script src="js/vendor/jquery-1.11.3.min.js"></script>
+
+<!-- service layer -->
+<script src="js/api.js"></script>
+
+<!-- util (order: fmt/dom/state have no interdeps but load fmt first) -->
+<script src="js/util/fmt.js"></script>
+<script src="js/util/dom.js"></script>
+<script src="js/util/state.js"></script>
+
+<!-- charts (depend on util) -->
+<script src="js/charts/barchart.js"></script>
+<script src="js/charts/sparkline.js"></script>
+
+<!-- views (depend on util + charts; quality.js also defines Meridian.Quality) -->
+<script src="js/views/quality.js"></script>
+<script src="js/views/stations.js"></script>
+<script src="js/views/forecast.js"></script>
+<script src="js/views/anomalies.js"></script>
+<script src="js/views/compare.js"></script>
+<script src="js/views/about.js"></script>
+
+<!-- app router / bootstrap (tabbed layout) -->
+<script src="js/app.js"></script>
+
+<!-- legacy single-page controller (self-gates on ?legacy=1) -->
+<script src="js/dashboard.js"></script>
+</body>
+</html>

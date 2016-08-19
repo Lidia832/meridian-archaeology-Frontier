@@ -1,0 +1,349 @@
+/* Meridian console styling. 2016. Do not run through a preprocessor,
+   the build box does not have node on it. (Still true in 2023 - the
+   static server runs node but the build box was never given it. MRD-181
+   is the same story on the JS side: no build, so no charting library.)
+
+   History, newest at the bottom of each section:
+     2016-08  L. Nakamura  original single-page layout
+     2018-04  R. Patel     tab bar, tiles, split panels, buttons
+     2020-09  T. Osei      banners/spinners, chips, pills, sparklines
+     2021-05  T. Osei      compare small-multiples, year strip
+     2022-01  T. Osei      data-quality completeness bars, stacked segs
+     2023-02  T. Osei      responsive-ish tweaks, dark-header polish
+   The province style guide (2015) drives the colours: forest green header,
+   pale field backgrounds, no pure black text. */
+
+/* ---- reset-ish + base (2016) -------------------------------------- */
+* { box-sizing: border-box; }
+body {
+  font-family: "Segoe UI", Tahoma, sans-serif;
+  font-size: 13px;
+  margin: 0;
+  color: #222;
+  background: #f4f4f0;
+  -webkit-text-size-adjust: 100%;   /* stop iOS Safari inflating text */
+}
+a { color: #2f6f2f; }
+a:hover { color: #1e4d1e; }
+
+/* ---- header (2016, polished 2023) --------------------------------- */
+#header {
+  background: #2f4f2f;
+  background: linear-gradient(180deg, #33552f 0%, #294526 100%);
+  color: #fff;
+  padding: 10px 16px;
+  border-bottom: 3px solid #1c3319;
+}
+#header h1 { display: inline; font-size: 18px; margin: 0 12px 0 0; letter-spacing: 0.5px; }
+#header .sub { font-size: 12px; opacity: 0.85; }
+#header .ver { float: right; font-size: 11px; opacity: 0.85; padding-top: 4px; }
+#header .ver.ok::before { content: "\25cf "; color: #9ede8a; }
+#header .ver.down { color: #ffbdbd; }
+#header .ver.down::before { content: "\25cf "; color: #ff8a8a; }
+
+/* ---- tab bar (2018 R.P.) ------------------------------------------ */
+.tabbar {
+  background: #e3e8dd;
+  border-bottom: 1px solid #cbd2c2;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow-x: auto;   /* narrow screens: scroll the tabs rather than wrap */
+}
+.tabbar .tab {
+  display: inline-block;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: #3a4a33;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-bottom: none;
+  margin: 4px 2px 0;
+  border-radius: 3px 3px 0 0;
+}
+.tabbar .tab:hover { background: #eef2e8; color: #1e4d1e; }
+.tabbar .tab.active {
+  background: #f4f4f0;
+  border-color: #cbd2c2;
+  color: #1c3319;
+  font-weight: 600;
+  position: relative;
+  top: 1px;
+}
+
+/* ---- content + views ---------------------------------------------- */
+.content { padding: 16px; }
+.view { }
+.view-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 2px solid #cbd2c2;
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.view-head h2 { margin: 0; }
+.view-actions { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.subtitle { font-weight: normal; color: #6a7a5a; font-size: 13px; }
+
+h2 { font-size: 15px; margin: 16px 0 6px; color: #2f4f2f; }
+h3 { font-size: 13px; margin: 14px 0 6px; color: #3a5a33; text-transform: uppercase;
+     letter-spacing: 0.4px; }
+
+/* ---- tables (2016 base, extended) --------------------------------- */
+table.grid { border-collapse: collapse; width: 100%; background: #fff; }
+table.grid th {
+  background: #e3e8dd; text-align: left; padding: 5px 8px;
+  border: 1px solid #cbd2c2; font-weight: 600; white-space: nowrap;
+}
+table.grid td { padding: 4px 8px; border: 1px solid #e0e0d8; }
+table.grid tbody tr:hover { background: #f0f4ea; cursor: pointer; }
+table.grid tr.sel td { background: #dce8cf; }
+table.small td, table.small th { font-size: 11px; padding: 2px 6px; }
+table.grid td.num, table.grid td.right { text-align: right; font-variant-numeric: tabular-nums; }
+table.grid td.center { text-align: center; }
+table.grid td.muted, .muted { color: #7a8a6a; }
+table.grid td.nowrap, .nowrap { white-space: nowrap; }
+table.grid td.empty { color: #999; font-style: italic; text-align: center; }
+.small { font-size: 11px; }
+table.sortable th { cursor: pointer; user-select: none; }
+table.sortable th:hover { background: #dbe2d1; }
+
+/* zebra striping added 2019 - operators asked for it on the long series */
+table.grid.series-tbl tbody tr:nth-child(even),
+table.grid.anomaly-tbl tbody tr:nth-child(even) { background: #fafbf7; }
+
+/* ---- the biomass bar chart (MRD-181) ------------------------------ *
+ * Original 2016 rule kept verbatim, plus the styles the factored-out
+ * charts/barchart.js needs. Still just absolutely-positioned divs.      */
+#chart { height: 160px; background: #fff; border: 1px solid #cbd2c2; margin-bottom: 10px; position: relative; overflow: hidden; }
+#chart .bar { position: absolute; bottom: 0; background: #6b8e5a; width: 2px; }
+
+.chart {
+  position: relative; background: #fff; border: 1px solid #cbd2c2;
+  height: 160px; margin-bottom: 8px; overflow: hidden;
+}
+.chart.tall { height: 200px; }
+.chart.short { height: 96px; }
+.chart.mini { height: 100px; }
+.barchart .bar {
+  position: absolute; bottom: 0; background: #6b8e5a; width: 2px;
+}
+.barchart .bar.hi { background: #b8862b; }             /* series-table hover */
+.barchart .bar.v-biom { background: #6b8e5a; }
+.barchart .bar.v-lai  { background: #4a8f7a; }
+.barchart .bar.v-sw   { background: #5a7fa0; }
+.barchart .bar.v-et   { background: #a08a4a; }
+.barchart .bar.v-ok   { background: #6b8e5a; }
+.barchart .bar.v-err  { background: #b45a4a; }
+.barchart .gridline {
+  position: absolute; left: 0; right: 0; height: 0;
+  border-top: 1px dotted #d8ddcf;
+}
+.barchart .gridlabel {
+  position: absolute; right: 2px; font-size: 9px; color: #9aa88a;
+  background: rgba(255,255,255,0.6); padding: 0 2px;
+}
+.chart-empty { padding: 24px 12px; color: #999; font-style: italic; text-align: center; }
+.chart-readout {
+  position: absolute; top: 4px; left: 8px; display: none;
+  background: rgba(28,51,25,0.9); color: #fff; font-size: 11px;
+  padding: 2px 6px; border-radius: 3px; pointer-events: none; z-index: 5;
+  white-space: nowrap;
+}
+.chart-head { display: flex; align-items: baseline; justify-content: space-between;
+              flex-wrap: wrap; gap: 6px; }
+.chart-controls { display: flex; gap: 10px; align-items: center; }
+.chart-controls label { font-size: 11px; color: #5a6a4a; }
+
+/* stacked variant (data-quality) */
+.barchart.stacked .stack { position: absolute; bottom: 0; }
+.barchart .seg { position: absolute; left: 0; right: 0; }
+.barchart .seg-a { bottom: 0; background: #6b8e5a; }   /* clean */
+.barchart .seg-b { background: #c58a3a; }              /* flagged */
+.barchart.stacked .stack .seg-b { bottom: auto; }
+
+/* ---- tiles (2018) ------------------------------------------------- */
+.tiles { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.tile {
+  background: #fff; border: 1px solid #cbd2c2; border-left: 4px solid #6b8e5a;
+  padding: 8px 12px; min-width: 130px; flex: 1 1 130px;
+}
+.tile-val { font-size: 20px; font-weight: 600; color: #2f4f2f; line-height: 1.1;
+            font-variant-numeric: tabular-nums; }
+.tile-label { font-size: 11px; text-transform: uppercase; color: #6a7a5a; letter-spacing: 0.4px; }
+.tile-sub { font-size: 10px; color: #99a889; margin-top: 2px; }
+
+/* ---- split / panels ----------------------------------------------- */
+.split { display: flex; gap: 16px; align-items: flex-start; }
+.split-l { flex: 1 1 45%; min-width: 0; }
+.split-r { flex: 1 1 55%; min-width: 0; }
+.scroll-y { max-height: 320px; overflow-y: auto; border: 1px solid #e0e0d8; }
+.scroll-y table.grid { border: none; }
+
+/* ---- buttons + form controls (2018) ------------------------------- */
+.btn, .btn-sm, .btn-mini {
+  font-family: inherit; border: 1px solid #9fb08c; background: #eef2e8;
+  color: #33502f; cursor: pointer; border-radius: 3px; padding: 4px 10px;
+  font-size: 12px;
+}
+.btn:hover, .btn-sm:hover, .btn-mini:hover { background: #e0e8d6; }
+.btn:active { background: #d4dfc8; }
+.btn-sm { padding: 2px 8px; font-size: 11px; }
+.btn-mini { padding: 1px 7px; font-size: 12px; line-height: 1.2; }
+.btn-mini.cmp.on { background: #6b8e5a; color: #fff; border-color: #567a48; }
+.select, .filter-box {
+  font-family: inherit; font-size: 12px; padding: 3px 6px;
+  border: 1px solid #b8c2a8; border-radius: 3px; background: #fff; color: #333;
+}
+.select-sm { font-size: 11px; padding: 1px 4px; }
+.filter-box { min-width: 160px; }
+
+/* ---- banners / loading / empty (2020) ----------------------------- */
+.banner { padding: 6px 10px; border-radius: 3px; margin: 6px 0; font-size: 12px;
+          border: 1px solid transparent; }
+.banner.info  { background: #eef3fb; border-color: #c6d6ee; color: #33507a; }
+.banner.ok    { background: #eef6e6; border-color: #c6dfae; color: #3a6a2a; }
+.banner.warn  { background: #fdf4e3; border-color: #eed9a8; color: #8a6320; }
+.banner.error { background: #fbecec; border-color: #eebcbc; color: #9a3030; }
+.loading { padding: 16px; color: #7a8a6a; font-style: italic; }
+.loading .pulse { display: inline-block; animation: mrd-spin 1.4s linear infinite; }
+@keyframes mrd-spin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
+.empty-state { padding: 28px 16px; text-align: center; color: #99a889; font-style: italic;
+               background: #fff; border: 1px dashed #cbd2c2; }
+.note { font-size: 11px; color: #8a9a7a; margin: 8px 0; }
+
+/* ---- chips + pills (2020/2021) ------------------------------------ */
+.chips { display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0; }
+.chip {
+  font-family: inherit; font-size: 11px; border: 1px solid #c2ccb2;
+  background: #fff; color: #4a5a3a; padding: 2px 8px; border-radius: 12px;
+  cursor: pointer;
+}
+.chip:hover { background: #f0f4ea; }
+.chip.on { background: #6b8e5a; color: #fff; border-color: #567a48; }
+.chip .chip-n { font-weight: 600; opacity: 0.85; margin-left: 3px; }
+.chip-x { border: none; background: none; color: inherit; cursor: pointer;
+          font-size: 12px; padding: 0 0 0 4px; }
+.cmp-chip { cursor: default; }
+.pill {
+  display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 10px;
+  margin: 1px 3px 1px 0; background: #e3e8dd; color: #445; white-space: nowrap;
+}
+.pill.ok { background: #cfe6c0; color: #2f5a22; }
+.pill.flag-sw-range  { background: #d6e2f0; color: #2f4f7a; }
+.pill.flag-et-range  { background: #f0e2c8; color: #7a5a20; }
+.pill.flag-drain-neg { background: #e6d6ee; color: #5a2f7a; }
+.pill.flag-lai-range { background: #d8ecd0; color: #2f6a3a; }
+.pill.flag-biom-drop { background: #f0d2cc; color: #8a3020; }
+.chip.flag-sw-range.on  { background: #4f7abf; border-color: #3f66a8; }
+.chip.flag-et-range.on  { background: #bf9a3f; border-color: #a8842f; }
+.chip.flag-drain-neg.on { background: #8a5abf; border-color: #7548a8; }
+.chip.flag-lai-range.on { background: #4f9a5f; border-color: #3f8850; }
+.chip.flag-biom-drop.on { background: #bf5a45; border-color: #a84838; }
+
+/* ---- sparklines (2020) - inline div columns ----------------------- */
+.spark { position: relative; display: inline-block; vertical-align: middle;
+         background: #f6f8f2; }
+.spark .col { position: absolute; bottom: 0; background: #6b8e5a; }
+.spark .dot { position: absolute; width: 2px; height: 2px; background: #4a6f3a;
+              border-radius: 50%; }
+.spark.empty { background: repeating-linear-gradient(45deg,#f0f0ea,#f0f0ea 3px,#e8e8e0 3px,#e8e8e0 6px); }
+.spark-trend { font-size: 11px; margin-left: 3px; vertical-align: middle; }
+.spark-trend.up { color: #3a8a2a; }
+.spark-trend.down { color: #b04a3a; }
+.spark-trend.flat { color: #99a; }
+.spark-pending { color: #bbb; }
+.spark-cell { white-space: nowrap; }
+
+/* ---- key/value + kvs (diagnostics, detail) ------------------------ */
+.kvs { background: #fff; border: 1px solid #e0e0d8; }
+.kv { display: flex; justify-content: space-between; padding: 4px 10px;
+      border-bottom: 1px solid #eef0e8; font-size: 12px; }
+.kv:last-child { border-bottom: none; }
+.kv .k { color: #6a7a5a; }
+.kv .v { font-weight: 600; color: #33502f; text-align: right; font-variant-numeric: tabular-nums; }
+.rules .kv .v { font-weight: normal; }
+
+/* ---- data-quality completeness bars (2022) - divs ----------------- */
+.bars-v { background: #fff; border: 1px solid #e0e0d8; padding: 8px 10px; }
+.bar-v-row { display: flex; align-items: center; gap: 8px; margin: 5px 0; font-size: 11px; }
+.bar-v-label { width: 78px; color: #5a6a4a; flex: none; }
+.bar-v-track { position: relative; flex: 1; height: 12px; background: #eef0e8;
+               border: 1px solid #e0e0d8; overflow: hidden; }
+.bar-v-fill { position: absolute; left: 0; top: 0; bottom: 0; background: #8fb47a; }
+.bar-v-flag { position: absolute; right: 0; top: 0; bottom: 0; background: #d69a4a; opacity: 0.85; }
+.bar-v-val { width: 110px; text-align: right; color: #6a7a5a; flex: none; }
+
+/* legend for the stacked chart */
+.legend { font-size: 11px; color: #6a7a5a; margin-top: 4px; }
+.legend-item { margin-right: 12px; }
+.legend-item i { display: inline-block; width: 10px; height: 10px; vertical-align: middle;
+                 margin-right: 3px; }
+.legend-item i.seg-a { background: #6b8e5a; }
+.legend-item i.seg-b { background: #c58a3a; }
+.legend-note { color: #99a889; }
+
+/* ---- anomalies year strip (2021) - div ticks ---------------------- */
+#an-strip-wrap { margin: 8px 0 12px; }
+.strip-label { font-size: 11px; color: #6a7a5a; margin-bottom: 3px; }
+.year-strip { position: relative; height: 24px; background: #fff;
+              border: 1px solid #cbd2c2; overflow: hidden; }
+.year-strip .tick { position: absolute; top: 3px; bottom: 3px; width: 2px;
+                    background: #c58a3a; }
+.year-strip .tick.multi { background: #b45a4a; width: 3px; }
+.strip-empty { padding: 4px 8px; color: #99a889; font-style: italic; font-size: 11px; }
+.an-summary { margin: 4px 0; }
+
+/* ---- compare small multiples (2021) ------------------------------- */
+.small-multiples { display: flex; flex-wrap: wrap; gap: 10px; }
+.multiple { flex: 1 1 240px; min-width: 200px; border: 1px solid #e0e0d8;
+            background: #fbfcf9; padding: 6px; }
+.multiple-head { font-size: 12px; font-weight: 600; color: #33502f; margin-bottom: 4px; }
+.cmp-chips { margin-bottom: 10px; }
+
+/* ---- about: screen migration list (2023) -------------------------- */
+ul.screens { list-style: none; margin: 0; padding: 0; background: #fff;
+             border: 1px solid #e0e0d8; }
+ul.screens li { padding: 4px 10px; border-bottom: 1px solid #eef0e8; font-size: 12px; }
+ul.screens li:last-child { border-bottom: none; }
+ul.screens li.migrated .screen-mark { color: #3a8a2a; }
+ul.screens li.legacy .screen-mark { color: #b8862b; }
+.screen-mark { display: inline-block; width: 16px; font-weight: 600; }
+
+/* ---- footer (2016) ------------------------------------------------ */
+#footer { padding: 8px 16px; font-size: 11px; color: #777; border-top: 1px solid #ddd; }
+#footer a { color: #6a7a5a; }
+
+/* ---- legacy single-page shell (?legacy=1) ------------------------- *
+ * Kept so dashboard.js still has somewhere to render. Mirrors the 2016
+ * two-column layout. */
+.legacy-shell #main { display: flex; gap: 16px; padding: 16px; align-items: flex-start; }
+.legacy-shell #left { width: 280px; flex: none; }
+.legacy-shell #right { flex: 1; min-width: 0; }
+
+/* ---- responsive-ish (2023 T.O.) ----------------------------------- *
+ * Not a real breakpoint system - just enough that the regional offices'
+ * 1024px panels and the occasional tablet don't look broken. */
+@media (max-width: 860px) {
+  .split { flex-direction: column; }
+  .split-l, .split-r { flex: 1 1 auto; width: 100%; }
+  .tiles .tile { flex-basis: 45%; }
+  .view-head { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 560px) {
+  .tiles .tile { flex-basis: 100%; }
+  .content { padding: 10px; }
+  .filter-box { min-width: 110px; }
+  #header h1 { display: block; margin-bottom: 2px; }
+  #header .ver { float: none; display: block; }
+}
+
+/* print: operators occasionally print the forecast table for sign-off.
+   Hide the chrome. Added 2019 R.P. */
+@media print {
+  #header, .tabbar, .view-actions, #footer, .chart, .year-strip { display: none; }
+  body { background: #fff; }
+  table.grid th { background: #eee !important; }
+}
