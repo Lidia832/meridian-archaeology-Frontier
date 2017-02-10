@@ -94,3 +94,4 @@ public final class ApiServer {
                 + " against " + db);
     }
 }
+// 2017-02 M. Brandt: container host retired; reduced from Spring to the JDK HttpServer.
