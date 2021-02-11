@@ -99,3 +99,4 @@ subroutine growth(n, idoy, tmax, tmin, srad, sw, awc, xlat, biom, xlai, yield)
    yield = grain_yield(dm)
 
 end subroutine growth
+! 2021-02-11 K. Osei: GROWTH uses SW/(AWC*100); WATBAL uses SW/SWMAX. They disagree off 1000 mm rooting. MRD-204.
