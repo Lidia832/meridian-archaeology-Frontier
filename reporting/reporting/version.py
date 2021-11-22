@@ -28,3 +28,4 @@ VERSION_TUPLE = tuple(int(p) for p in __version__.split("."))
 def version_string() -> str:
     """Human string used in footers, e.g. 'v3.6.2'."""
     return "v" + __version__
+# 2021-11 P. Adeyemi: 132-column layout added.
