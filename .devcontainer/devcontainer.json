@@ -1,0 +1,21 @@
+{
+  "name": "Meridian (CIS*3250)",
+  "build": { "dockerfile": "Dockerfile", "context": ".." },
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "forwardPorts": [8080, 8081],
+  "portsAttributes": {
+    "8080": { "label": "Meridian console" },
+    "8081": { "label": "Meridian API" }
+  },
+  "postCreateCommand": "make all",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "fortran-lang.linter-gfortran",
+        "vscjava.vscode-java-pack",
+        "ms-python.python"
+      ]
+    }
+  }
+}

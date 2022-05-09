@@ -1,0 +1,16 @@
+*.o
+*.pyc
+__pycache__/
+.pytest_cache/
+services/build/
+model/cropmod
+model/*.mod
+model/MERIDIAN.OUT
+model/MERIDIAN.DAT
+ingest/mrd_ingest
+ingest/mrd_replay
+data/*.db
+data/*.bin
+data/*.txt
+ui-next/node_modules/
+ui-next/dist/

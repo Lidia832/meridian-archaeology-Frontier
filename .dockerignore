@@ -1,0 +1,9 @@
+.git
+data/
+**/*.o
+**/*.class
+**/*.pyc
+**/__pycache__/
+model/cropmod
+ingest/mrd_ingest
+services/build/

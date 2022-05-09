@@ -1,0 +1,20 @@
+# Meridian's toolchain runs entirely inside a Linux container, so every text
+# file must be checked out with LF line endings on ALL platforms. Without this,
+# Git for Windows (core.autocrlf=true by default) rewrites the shell scripts to
+# CRLF on checkout, and the container then fails with errors like
+# "./run.sh: not found" or "./services/build.sh: No such file or directory".
+* text=auto eol=lf
+
+# Be explicit for the files that are executed or parsed in the container:
+*.sh      text eol=lf
+Makefile  text eol=lf
+*.f       text eol=lf
+*.f90     text eol=lf
+*.c       text eol=lf
+*.h       text eol=lf
+*.java    text eol=lf
+*.py      text eol=lf
+*.js      text eol=lf
+
+# Precompiled/vendored assets that must never be line-ending converted:
+dashboard/js/vendor/jquery-1.11.3.min.js -text
