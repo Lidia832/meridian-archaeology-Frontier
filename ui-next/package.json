@@ -1,0 +1,33 @@
+{
+  "name": "meridian-ui-next",
+  "private": true,
+  "version": "0.3.0",
+  "description": "Meridian operator console rewrite (2023). Partial migration off the legacy dashboard/ console. 3 of 11 screens implemented. See MIGRATION.md.",
+  "type": "module",
+  "author": "Meridian Web Team <web@meridian.internal>",
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo 'TODO(ui-next): eslint config never landed. See MIGRATION.md.' && exit 0",
+    "test": "echo 'TODO(ui-next): vitest never added. src/**/*.test.ts are specs that do not run yet. See MIGRATION.md.' && exit 0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.4.5",
+    "vite": "^5.4.10"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

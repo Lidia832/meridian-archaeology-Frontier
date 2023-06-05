@@ -1,0 +1,25 @@
+<!doctype html>
+<!--
+  Meridian operator console — ui-next (2023 rewrite).
+
+  This replaces exactly three screens of the legacy console in ../dashboard.
+  The other eight are still served by the old jQuery app. If you landed here
+  looking for Anomalies, Compare, Data Quality, Ingest Monitor, Model Runs,
+  Audit Log, Settings or About — they were never migrated. See MIGRATION.md.
+
+  Operators: bookmark BOTH consoles. Ops runbook still points at /console.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/leaf.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Meridian operator console (ui-next, partial migration)" />
+    <title>Meridian · ui-next</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>The Meridian ui-next console requires JavaScript. The legacy console at /console also requires it.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

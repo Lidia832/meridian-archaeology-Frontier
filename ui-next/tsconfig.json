@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    // vite.config.ts runs in Node, so we let the one program see the node types
+    // as well as the DOM. Everything under src is browser code.
+    "types": ["node", "vite/client"],
+
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src", "vite.config.ts"],
+  // The *.test.ts files were written against Vitest, but Vitest was never added
+  // to package.json (see MIGRATION.md, debt item 4), so they are excluded from
+  // the type build and do not run. They are kept as the spec they were meant to
+  // be, ready for whoever wires up the runner.
+  "exclude": ["src/**/*.test.ts"]
+}
