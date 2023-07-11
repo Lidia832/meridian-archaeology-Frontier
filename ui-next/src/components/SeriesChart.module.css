@@ -1,0 +1,93 @@
+/* SeriesChart.module.css
+ * M. Osei, 2023-07 — scoped styles for the hand-rolled SVG chart.
+ * CSS-module so the generic class names (.axis, .grid, .line) don't collide
+ * with the global stylesheet.
+ */
+
+.wrap {
+  width: 100%;
+}
+
+.svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.gridline {
+  stroke: #ececec;
+  stroke-width: 1;
+}
+
+.axis {
+  stroke: #b9b8ad;
+  stroke-width: 1;
+}
+
+.axisLabel {
+  fill: var(--ink-soft);
+  font-size: 10px;
+  font-family: var(--sans);
+}
+
+.line {
+  fill: none;
+  stroke-width: 1.6;
+}
+
+.dot {
+  stroke: #fff;
+  stroke-width: 1;
+}
+
+.hoverLine {
+  stroke: #999;
+  stroke-dasharray: 3 3;
+  stroke-width: 1;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.legendItem:hover { background: #f2f1ea; }
+.legendOff { opacity: 0.4; }
+
+.swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: #1f241d;
+  color: #eef0e6;
+  font-size: 11px;
+  font-family: var(--mono);
+  padding: 6px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  z-index: 5;
+}
+.tooltip .tRow { display: flex; justify-content: space-between; gap: 12px; }
+.tooltip .tKey { color: #97a189; }
