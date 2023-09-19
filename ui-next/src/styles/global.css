@@ -1,0 +1,337 @@
+/* src/styles/global.css
+ * M. Osei, 2023-06 — base theme + layout shell for ui-next.
+ *
+ * The legacy console (dashboard/css/meridian.css) is a single flat stylesheet
+ * with hard-coded colours. This isn't much better yet, but it at least uses
+ * custom properties so that a Settings screen could theme it one day. That
+ * Settings screen is a stub (see /settings), so the properties just sit here.
+ */
+
+:root {
+  /* palette — muted, agri/earth, chosen to read on a projector in a barn office */
+  --bg: #f5f4ef;
+  --panel: #ffffff;
+  --ink: #23241f;
+  --ink-soft: #5c5f54;
+  --line: #dcdbd2;
+  --accent: #2f7d4f;      /* meridian green */
+  --accent-weak: #e4efe7;
+  --warn: #b7791f;
+  --warn-weak: #f6ecd7;
+  --bad: #b03535;
+  --bad-weak: #f6dede;
+  --ok: #2f7d4f;
+
+  /* channel colours, shared by chart + legend (see api/types SeriesChannel) */
+  --ch-sw: #2f6fb0;
+  --ch-et: #b7791f;
+  --ch-drain: #7a8a57;
+  --ch-biom: #2f7d4f;
+  --ch-lai: #8a5a9c;
+
+  --radius: 4px;
+  --mono: 'SFMono-Regular', ui-monospace, 'Cascadia Mono', Menlo, Consolas, monospace;
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body, #root { height: 100%; margin: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+a { color: var(--accent); }
+
+code, .mono { font-family: var(--mono); font-size: 0.92em; }
+
+/* ---------- app shell ---------- */
+
+.app {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  grid-template-rows: 100%;
+  height: 100%;
+}
+
+.sidebar {
+  background: #1f241d;
+  color: #d9dcd0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #10130d;
+  overflow-y: auto;
+}
+
+.brand {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid #333a2e;
+}
+.brand h1 { font-size: 16px; margin: 0; letter-spacing: 0.02em; }
+.brand .sub { font-size: 11px; color: #97a189; margin-top: 2px; }
+.brand .stall {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: #4a3a1a;
+  color: #f0d79a;
+  border: 1px solid #6b551f;
+}
+
+.nav { list-style: none; margin: 8px 0; padding: 0; flex: 1; }
+.nav li { margin: 0; }
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 16px;
+  color: #c4c9b8;
+  text-decoration: none;
+  font-size: 13px;
+  border-left: 3px solid transparent;
+}
+.nav a:hover { background: #2a3122; color: #eef0e6; }
+.nav a.active { background: #2a3122; color: #fff; border-left-color: var(--accent); }
+.nav a .glyph { width: 16px; text-align: center; opacity: 0.85; }
+.nav a.stub { color: #8a917e; }
+.nav a.stub .label::after {
+  content: 'stub';
+  margin-left: 6px;
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #b9a15f;
+  border: 1px solid #6b551f;
+  border-radius: 3px;
+  padding: 0 3px;
+}
+
+.sidebar-foot {
+  padding: 10px 16px;
+  border-top: 1px solid #333a2e;
+  font-size: 11px;
+  color: #8a917e;
+}
+
+/* ---------- main pane ---------- */
+
+.main { overflow-y: auto; padding: 20px 24px 40px; }
+
+.page-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+.page-head h2 { margin: 0; font-size: 20px; }
+.page-head .crumb { font-size: 12px; color: var(--ink-soft); }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.panel > h3 { margin: 0 0 10px; font-size: 14px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.04em; }
+
+.row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+.grow { flex: 1 1 320px; min-width: 0; }
+
+/* ---------- tables ---------- */
+
+table.grid { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.grid th, table.grid td {
+  text-align: left;
+  padding: 5px 10px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+table.grid th {
+  color: var(--ink-soft);
+  font-weight: 600;
+  cursor: default;
+  user-select: none;
+}
+table.grid th.sortable { cursor: pointer; }
+table.grid th.sortable:hover { color: var(--ink); }
+table.grid th .arrow { font-size: 10px; margin-left: 4px; color: var(--accent); }
+table.grid td.num, table.grid th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.grid tbody tr:hover { background: #faf9f4; }
+table.grid tbody tr.sel { background: var(--accent-weak); }
+table.grid tbody tr.clickable { cursor: pointer; }
+
+/* ---------- small ui bits ---------- */
+
+.toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+.toolbar input[type='search'], .toolbar input[type='text'], .toolbar select {
+  font: inherit;
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+}
+.btn {
+  font: inherit;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+
+.muted { color: var(--ink-soft); }
+.count { color: var(--ink-soft); font-size: 12px; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+.badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ink-soft); }
+.badge.ok { background: var(--accent-weak); border-color: #bcdcc7; color: #1f5a37; }
+.badge.ok .dot { background: var(--ok); }
+.badge.warn { background: var(--warn-weak); border-color: #e6cf9a; color: #7a5510; }
+.badge.warn .dot { background: var(--warn); }
+.badge.bad { background: var(--bad-weak); border-color: #e6b3b3; color: #8a2626; }
+.badge.bad .dot { background: var(--bad); }
+
+.banner {
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  font-size: 13px;
+  border: 1px solid;
+}
+.banner.error { background: var(--bad-weak); border-color: #e6b3b3; color: #7c2222; }
+.banner.warn { background: var(--warn-weak); border-color: #e6cf9a; color: #6b4a0e; }
+.banner.info { background: var(--accent-weak); border-color: #bcdcc7; color: #1f5a37; }
+
+.spinner {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: -3px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty {
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 28px 12px;
+}
+
+/* ---------- stat tiles ---------- */
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.stat-tile {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--ink-soft);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+}
+.stat-tile.tone-ok { border-left-color: var(--ok); }
+.stat-tile.tone-warn { border-left-color: var(--warn); }
+.stat-tile.tone-bad { border-left-color: var(--bad); }
+.stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+}
+.stat-value {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+.stat-hint { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+
+dl.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; margin: 0; }
+dl.kv dt { color: var(--ink-soft); }
+dl.kv dd { margin: 0; font-family: var(--mono); }
+
+details > summary { outline: none; }
+details > summary:hover { color: var(--ink); }
+
+/* ---------- responsive ----------
+ * The console is a desktop tool (operators run it on a fixed workstation), and
+ * the migration never got a real mobile pass — this is the minimum so that a
+ * narrow window does not produce a horizontal scrollbar. On a phone the sidebar
+ * collapses to a horizontal strip above the content. It is functional, not
+ * polished; a proper responsive nav was never scoped.
+ */
+@media (max-width: 860px) {
+  .app {
+    grid-template-columns: 100%;
+    grid-template-rows: auto 1fr;
+    height: auto;
+    min-height: 100%;
+  }
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #10130d;
+  }
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+  }
+  .nav a {
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    padding: 6px 10px;
+  }
+  .nav a.active {
+    border-left-color: transparent;
+    border-bottom-color: var(--accent);
+  }
+  .nav a.stub .label::after { display: none; }
+  .sidebar-foot { display: none; }
+  .row { flex-direction: column; }
+  .grow { flex-basis: auto !important; width: 100%; }
+  .page-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
+
+@media (max-width: 520px) {
+  .main { padding: 14px 16px 32px; }
+  table.grid th, table.grid td { padding: 4px 6px; }
+}
+
+/* ---------- print ----------
+ * Operators occasionally print a forecast table for a field binder. Hide the
+ * chrome; let the tables flow. Never fully tested — added the afternoon someone
+ * asked, then the migration stalled.
+ */
+@media print {
+  .sidebar, .toolbar, .btn, .page-head .crumb { display: none !important; }
+  .app { display: block; }
+  .panel { border: none; padding: 0; }
+  body { background: #fff; }
+}
