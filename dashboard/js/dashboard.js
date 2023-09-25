@@ -101,3 +101,4 @@ $(function () {
 
     loadStations();
 });
+// 2023-09 T. Osei: stations/forecast/health now also served by ui-next/. Both consoles deployed. MRD-219.
